@@ -1,3 +1,4 @@
+python==3.8.19
 pandas==1.5.3
 streamlit==1.37.0
 yfinance==0.2.41
