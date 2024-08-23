@@ -40,7 +40,8 @@ def retrieve_data(ticker_list, start_date, end_date):
         print("No data to return.")
         return pd.DataFrame()
     
-news_api_key = 'a4bb177a2e774dc4abdafd5dbf9c7eeb'
+# news_api_key = 'a4bb177a2e774dc4abdafd5dbf9c7eeb'
+news_api_key = 'a3dc05159a6446d19d52933d7965f8cc'
 
 # Fetch news articles using News API
 def fetch_news(api_key, query):
