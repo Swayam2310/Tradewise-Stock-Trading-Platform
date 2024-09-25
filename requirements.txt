@@ -5,3 +5,5 @@ streamlit==1.37.1
 textblob==0.18.0.post0
 requests==2.32.3
 plotly==5.23.0
+statsmodels==0.14.2
+transformers==4.44.2
