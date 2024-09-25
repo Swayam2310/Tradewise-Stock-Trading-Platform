@@ -145,69 +145,72 @@ else:
     st.write("No sentiment data available.")
 
 
-if st.session_state['ticker'] == 'AAPL':
-    # Load the CSV data
-    apple_sentiment_file = 'apple_news_sentiment.csv'
-    apple_df = pd.read_csv(apple_sentiment_file)
+if 'ticker' in st.session_state:
+    if st.session_state['ticker'] == 'AAPL':
+        # Load the CSV data
+        apple_sentiment_file = 'apple_news_sentiment.csv'
+        apple_df = pd.read_csv(apple_sentiment_file)
 
-    # Convert 'date' column to datetime format
-    apple_df['date'] = pd.to_datetime(apple_df['date'])
+        # Convert 'date' column to datetime format
+        apple_df['date'] = pd.to_datetime(apple_df['date'])
 
-    # Sort by date if not already sorted
-    apple_df = apple_df.sort_values(by='date')
+        # Sort by date if not already sorted
+        apple_df = apple_df.sort_values(by='date')
 
-    # Aggregate sentiment Scores
-    daily_sentiment = apple_df.groupby('date').agg({
-                        'score': 'mean'
-                        }).reset_index()
+        # Aggregate sentiment Scores
+        daily_sentiment = apple_df.groupby('date').agg({
+                            'score': 'mean'
+                            }).reset_index()
 
-    apple_price = st.session_state['retrieved_data']
-    apple_price['Date'] = pd.to_datetime(apple_price['Date'])
-    apple_price = apple_price.rename(columns={'Date': 'date'})
-    apple_price = apple_price.sort_values(by='date')
+        apple_price = st.session_state['retrieved_data']
+        apple_price['Date'] = pd.to_datetime(apple_price['Date'])
+        apple_price = apple_price.rename(columns={'Date': 'date'})
+        apple_price = apple_price.sort_values(by='date')
 
-    # Merge sentiment data with stock price data
-    apple_price_df = pd.merge(apple_price, apple_df, on='date')
+        # Merge sentiment data with stock price data
+        apple_price_df = pd.merge(apple_price, apple_df, on='date')
 
-    correlation = apple_price_df['score'].corr(apple_price['Close'])
+        correlation = apple_price_df['score'].corr(apple_price['Close'])
 
-    # Determine the description based on the correlation value
-    if correlation >= 0.8:
-        description = "Very strong positive association"
-    elif correlation >= 0.6:
-        description = "Strong positive association"
-    elif correlation >= 0.4:
-        description = "Moderate positive association"
-    elif correlation >= 0.2:
-        description = "Weak positive association"
-    elif correlation > 0:
-        description = "Very weak positive association"
-    elif correlation > -0.2:
-        description = "Very weak negative association"
-    elif correlation > -0.4:
-        description = "Weak negative association"
-    elif correlation > -0.6:
-        description = "Moderate negative association"
-    elif correlation > -0.8:
-        description = "Strong negative association"
-    elif correlation >= -1.0:
-        description = "Very strong negative association"
+        # Determine the description based on the correlation value
+        if correlation >= 0.8:
+            description = "Very strong positive association"
+        elif correlation >= 0.6:
+            description = "Strong positive association"
+        elif correlation >= 0.4:
+            description = "Moderate positive association"
+        elif correlation >= 0.2:
+            description = "Weak positive association"
+        elif correlation > 0:
+            description = "Very weak positive association"
+        elif correlation > -0.2:
+            description = "Very weak negative association"
+        elif correlation > -0.4:
+            description = "Weak negative association"
+        elif correlation > -0.6:
+            description = "Moderate negative association"
+        elif correlation > -0.8:
+            description = "Strong negative association"
+        elif correlation >= -1.0:
+            description = "Very strong negative association"
+        else:
+            description = "Perfect negative association"
+
+        # Display the correlation result and description
+        st.markdown(f"### Correlation between Apple and News")
+        st.write(f"The value of Correlation is: **{correlation:.4f}**")
+        st.write(f"Which mean they have: {description}")
+
+        fig = px.scatter(apple_price_df,
+                         x='score',
+                         y='Close',
+                         labels={'Close': 'Stock Close Price', 'score': 'The level of Sentiment'},
+                         trendline="ols")
+
+        # Show plot
+        st.plotly_chart(fig)
     else:
-        description = "Perfect negative association"
-
-    # Display the correlation result and description
-    st.markdown(f"### Correlation between Apple and News")
-    st.write(f"The value of Correlation is: **{correlation:.4f}**")
-    st.write(f"Which mean they have: {description}")
-
-    fig = px.scatter(apple_price_df,
-                     x='score',
-                     y='Close',
-                     labels={'Close': 'Stock Close Price', 'score': 'The level of Sentiment'},
-                     trendline="ols")
-
-    # Show plot
-    st.plotly_chart(fig)
+        st.warning(f"Since rate limit, we only retrieved some Apple related news. \
+            There is no sentiment information for this stock {st.session_state['ticker']}.")
 else:
-    st.warning(f"Since rate limit, we only retrieved some Apple related news. \
-        There is no sentiment information for this stock {st.session_state['ticker']}.")
+    st.warning('No ticker selected, pls select ticker in Company Info.')
