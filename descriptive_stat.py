@@ -79,6 +79,9 @@ def plot_descriptive_stats(stats):
     st.plotly_chart(fig)
 
 
-stat = desc_stats(st.session_state['retrieved_data'])
-st.dataframe(stat, use_container_width=True)
-plot_descriptive_stats(stat)
+if 'retrieved_data' in st.session_state:
+    stat = desc_stats(st.session_state['retrieved_data'])
+    st.dataframe(stat, use_container_width=True)
+    plot_descriptive_stats(stat)
+else:
+    st.warning('No data available, please go to menu Company_Info to select the ticker!')
