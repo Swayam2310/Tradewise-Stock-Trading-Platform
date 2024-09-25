@@ -78,9 +78,11 @@ def main():
     st.session_state['ticker'] = st.sidebar.selectbox("Select Ticker", industries[selected_industry])
 
     # Fetch and display stock information
-    if st.session_state['ticker']:
+    if 'ticker' in st.session_state:
         company_info = fetch_company_info(st.session_state['ticker'])
         display_company_info(company_info)
+    else:
+        st.warning('No ticker selected')
 
 
 main()
