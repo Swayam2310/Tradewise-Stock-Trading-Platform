@@ -58,6 +58,6 @@ st.markdown("""
         }
     </style>
     <div class="footer">
-        <p>Trading Monitoring Platform &copy; 2024</p>
+        <p>TradeWise &copy; 2024</p>
     </div>
 """, unsafe_allow_html=True)
