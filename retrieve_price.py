@@ -102,10 +102,11 @@ end_date = st.sidebar.date_input("Ending Date",
 chart_type = ["Line Chart", "Candlestick", "Area Chart", "Histogram"]
 selected_chart = st.sidebar.selectbox("Select Chart Type", chart_type)
 
+st.markdown(f"### Stock Price Info: {st.session_state['ticker']}")
+st.session_state['retrieved_data'] = retrieve_data(st.session_state['ticker'], start_date, end_date)
+
 # Check if retrieved_data is not None and has data
 if 'retrieved_data' in st.session_state:
-    st.markdown(f"### Stock Price Info: {st.session_state['ticker']}")
-    st.session_state['retrieved_data'] = retrieve_data(st.session_state['ticker'], start_date, end_date)
     # 1. Visualize the selected stock price info in a DataFrame
     with st.container():
         st.dataframe(st.session_state['retrieved_data'],
