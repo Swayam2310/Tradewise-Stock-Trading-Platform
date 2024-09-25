@@ -49,6 +49,7 @@ def retrieve_data(ticker, start_date, end_date):
         # Return an empty DataFrame if no data was retrieved
         return pd.DataFrame()
 
+
 def visualize_data(stock_data, chart_type):
     # Display the selected chart
     if chart_type == "Line Chart":
@@ -101,17 +102,20 @@ end_date = st.sidebar.date_input("Ending Date",
 chart_type = ["Line Chart", "Candlestick", "Area Chart", "Histogram"]
 selected_chart = st.sidebar.selectbox("Select Chart Type", chart_type)
 
-st.markdown(f"### Stock Price Info: {st.session_state['ticker']}")
-st.session_state['retrieved_data'] = retrieve_data(st.session_state['ticker'], start_date, end_date)
+# Check if retrieved_data is not None and has data
+if 'retrieved_data' in st.session_state:
+    st.markdown(f"### Stock Price Info: {st.session_state['ticker']}")
+    st.session_state['retrieved_data'] = retrieve_data(st.session_state['ticker'], start_date, end_date)
+    # 1. Visualize the selected stock price info in a DataFrame
+    with st.container():
+        st.dataframe(st.session_state['retrieved_data'],
+                     height=318,
+                     use_container_width=True,
+                     hide_index=True,
+                     column_order=['Date', 'Open', 'High', 'Low', 'Close', 'Volume'])
 
-# 1. Visualize the selected stock price info in a Dataframe
-with st.container():
-    st.dataframe(st.session_state['retrieved_data'] ,
-                 height=318,
-                 use_container_width=True,
-                 hide_index=True,
-                 column_order=['Date', 'Open', 'High','Low', 'Close', 'Volume'])
-
-# 2. Visualize the selected stock price info with a chart
-with st.container():
-    visualize_data(st.session_state['retrieved_data'], selected_chart)
+    # 2. Visualize the selected stock price info with a chart
+    with st.container():
+        visualize_data(st.session_state['retrieved_data'], selected_chart)
+else:
+    st.warning("No data available for the selected ticker. Please try a different range or ticker.")
