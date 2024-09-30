@@ -34,8 +34,12 @@ analyze_seasonality = st.Page("analyze_seasonality.py",
                           title="Seasonality Analysis",
                           url_path="seaso",
                           icon="🌱")
+arima_model = st.Page("model.py",  
+                      title="ARIMA Predictions",  
+                      url_path="prediction",  
+                      icon="📈")  
 
-page_list = [comp_basic, retrieve_price, desc_stat, analyze_corr, sentiment_price, analyze_seasonality]
+page_list = [comp_basic, retrieve_price, desc_stat, analyze_corr, sentiment_price, analyze_seasonality, arima_model]
 # Configure the available pages in a multi-page app.
 pg = st.navigation(page_list)
 
