@@ -191,8 +191,14 @@ elif chart_type == "ARIMA Forecast":
     forecast_steps = 30  # You can allow the user to select this too
     
     # Define ARIMA order for each ticker (static for now, but can be dynamic)
-    arima_order = (1, 1, 1)
-    
+    arima_order = {
+        'AAPL': (0, 1, 0),
+        'AMD': (0, 1, 0),
+        'AMZN': (0, 1, 0),
+        'GOOGL': (1, 1, 1),
+        'AMRK': (1, 1, 1),
+        'APO': (0, 1, 0)
+    }    
     # Fit ARIMA model
     forecast_values, confidence_intervals = fit_arima_model(train_data, arima_order, forecast_steps)
     
