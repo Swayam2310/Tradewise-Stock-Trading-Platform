@@ -17,7 +17,6 @@ from statsmodels.tsa.arima.model import ARIMA
 from statsmodels.tsa.stattools import adfuller
 warnings.filterwarnings('ignore')
 
-
 # ### Data Loading and Pre-Processing
 
 # In[2]:
@@ -590,13 +589,6 @@ def fit_arima_model_and_evaluate(train_data, test_data, order, forecast_steps):
 
 
 # In[25]:
-
-
-import pandas as pd
-import matplotlib.pyplot as plt
-import numpy as np
-from sklearn.metrics import mean_absolute_error, mean_squared_error
-from statsmodels.tsa.arima.model import ARIMA
 
 # Function to calculate errors and confidence intervals
 def calculate_errors_and_ci(actual_values, forecast_values, confidence_intervals):
