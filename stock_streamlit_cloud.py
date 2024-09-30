@@ -7,6 +7,10 @@ from textblob import TextBlob
 import requests
 import plotly.graph_objs as go
 from plotly.subplots import make_subplots
+from statsmodels.tsa.arima.model import ARIMA
+from sklearn.metrics import mean_absolute_error, mean_squared_error
+import numpy as np
+import pmdarima as pm
 
 # Ticker symbols
 ticker_list = ['AAPL', 'GOOGL', 'AMZN', 'AMD', 'AMRK', 'APO']
@@ -102,6 +106,35 @@ def create_moving_average_chart(df, ticker):
                       yaxis_title='Price')
     return fig
 
+# Function to fit ARIMA model and generate forecast
+def fit_arima_model(train_data, order, forecast_steps):
+    try:
+        model = ARIMA(train_data, order=order)
+        fitted_model = model.fit()
+        forecast = fitted_model.get_forecast(steps=forecast_steps)
+        forecast_values = forecast.predicted_mean
+        confidence_intervals = forecast.conf_int()
+        return forecast_values, confidence_intervals
+    except Exception as e:
+        st.error(f"Error fitting ARIMA model: {e}")
+        return None, None
+
+# Function to plot ARIMA forecast
+def plot_forecast(ticker, actual_data, forecast_values, forecast_steps):
+    plt.figure(figsize=(12, 7))
+    plt.plot(actual_data.index, actual_data, label='Actual Data', color='green', linewidth=2.5)
+    forecast_index = pd.date_range(start=actual_data.index[-1], periods=forecast_steps + 1, freq='B')[1:]
+    forecast_values_with_last = pd.concat([pd.Series([actual_data.iloc[-1]], index=[actual_data.index[-1]]), forecast_values])
+    plt.plot(forecast_index.insert(0, actual_data.index[-1]), forecast_values_with_last, 
+             label='Forecast', color='blue', linewidth=2.5, linestyle='--')
+    plt.title(f'{ticker} Forecasted Close Prices', fontsize=18, fontweight='bold')
+    plt.xlabel('Date')
+    plt.ylabel('Close Price')
+    plt.legend(loc='upper left')
+    plt.grid(True)
+    plt.tight_layout()
+    st.pyplot(plt)
+
 # Retrieve the data
 ticker_historial_data = retrieve_data(ticker_list, start_date, end_date)
 
@@ -146,6 +179,27 @@ elif chart_type == "Candlestick Chart":
     st.plotly_chart(create_candlestick_chart(filtered_data, selected_ticker))
 elif chart_type == "Moving Averages":
     st.plotly_chart(create_moving_average_chart(filtered_data, selected_ticker))
+elif chart_type == "ARIMA Forecast":
+    st.subheader(f"ARIMA Forecast for {selected_ticker}")
+
+# Preparing data for ARIMA forecasting
+    close_prices = filtered_data.set_index('Date')['Close'].dropna()
+    train_size = int(len(close_prices) * 0.8)
+    train_data = close_prices[:train_size]
+    
+    # Forecast steps
+    forecast_steps = 30  # You can allow the user to select this too
+    
+    # Define ARIMA order for each ticker (static for now, but can be dynamic)
+    arima_order = (1, 1, 1)
+    
+    # Fit ARIMA model
+    forecast_values, confidence_intervals = fit_arima_model(train_data, arima_order, forecast_steps)
+    
+    # If forecasting was successful, plot the results
+    if forecast_values is not None:
+        plot_forecast(selected_ticker, close_prices, forecast_values, forecast_steps)
+
 
 # Sentiment Analysis
 st.sidebar.subheader("Market Sentiment")
