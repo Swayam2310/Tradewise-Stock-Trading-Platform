@@ -39,7 +39,7 @@ arima_model = st.Page("model.py",
                       url_path="prediction",  
                       icon="📈")  
 
-page_list = [comp_basic, retrieve_price, desc_stat, analyze_corr, sentiment_price, analyze_seasonality, model]
+page_list = [comp_basic, retrieve_price, desc_stat, analyze_corr, sentiment_price, analyze_seasonality, arima_model]
 # Configure the available pages in a multi-page app.
 pg = st.navigation(page_list)
 
