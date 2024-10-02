@@ -136,7 +136,7 @@ for ticker, data in grouped_data:
     max_volume_date = data['Volume'].idxmax()
     max_volume = data['Volume'].max()
     plt.annotate(f'Max Volume\n{max_volume:,}', xy=(max_volume_date, max_volume), 
-                xytext=(max_volume_date, max_volume * 0.8),  p
+                xytext=(max_volume_date, max_volume * 0.8),  
                 arrowprops=dict(facecolor='black', arrowstyle='->'),
                 fontsize=10, backgroundcolor='white')
 
