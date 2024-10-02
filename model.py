@@ -277,7 +277,7 @@ for ticker, model in fitted_models.items():
 
 
 # Arima Model Fit
-forecast_steps = 60
+forecast_steps = 30
 arima_orders = {
     'AAPL': (0, 1, 0),
     'AMD': (0, 1, 0),
