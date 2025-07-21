@@ -20,7 +20,7 @@ A data-driven stock trading platform designed to support smarter investment deci
 - **Version Control**: Git
 
 
-## 📈 Predictive Modelling (ARIMA)
+##  Predictive Modelling (ARIMA)
 
 - Time series forecasting for stocks including AAPL, AMZN, AMD, APO, GOOGL, and AMRK
 - Log transformation, differencing, and ADF tests used to ensure stationarity
@@ -38,14 +38,14 @@ A data-driven stock trading platform designed to support smarter investment deci
 | APO    | 7.23 | 8.14 | 20.46    |
 | GOOGL  | 4.57 | 5.51 | 26.44    |
 
-## 💬 Sentiment Analysis
+##  Sentiment Analysis
 
 - News headlines retrieved from NewsAPI
 - Sentiment classification using TextBlob and FinBERT
 - Sentiment scores correlated with stock price changes
 - Visual trend analysis of sentiment vs. price movement
 
-## 🔗 Correlation Insights
+##  Correlation Insights
 
 - AAPL vs. S&P 500 → Strong positive correlation (r = 0.97)
 - AAPL vs. News Sentiment → Weak correlation (r ≈ 0.01)
